@@ -21,7 +21,11 @@ func (s *Server) ClientUpdate(ctx context.Context, req *rcpb.ClientUpdateRequest
 	data, _, err := s.KSclient.Read(ctx, SCORES, &pb.Scores{})
 
 	code := status.Convert(err).Code()
-	if code != codes.OK {
+
+	// InvalidArgument is an empty read
+	if code == codes.InvalidArgument {
+		data = &pb.Scores{}
+	} else if code != codes.OK {
 		return nil, err
 	}
 	scores := data.(*pb.Scores)
