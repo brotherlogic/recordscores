@@ -12,6 +12,7 @@ import (
 
 	pbg "github.com/brotherlogic/goserver/proto"
 	rcpb "github.com/brotherlogic/recordcollection/proto"
+	pb "github.com/brotherlogic/recordscores/proto"
 )
 
 //Server main server type
@@ -30,6 +31,7 @@ func Init() *Server {
 // DoRegister does RPC registration
 func (s *Server) DoRegister(server *grpc.Server) {
 	rcpb.RegisterClientUpdateServiceServer(server, s)
+	pb.RegisterRecordScoreServiceServer(server, s)
 }
 
 // ReportHealth alerts if we're not healthy

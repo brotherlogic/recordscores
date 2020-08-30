@@ -16,3 +16,15 @@ message Score {
   recordcollection.ReleaseMetadata.Category category = 3;
   int64 score_time = 4;
 }
+
+message GetScoreRequest {
+  int32 instance_id = 1;
+}
+
+message GetScoreResponse {
+  repeated Score scores = 1;
+}
+
+service RecordScoreService {
+  rpc GetScore(GetScoreRequest) returns (GetScoreResponse) {};
+}
