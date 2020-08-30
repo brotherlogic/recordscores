@@ -5,15 +5,16 @@ import (
 	"strings"
 	"time"
 
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promauto"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
+	gdpb "github.com/brotherlogic/godiscogs"
 	rcpb "github.com/brotherlogic/recordcollection/proto"
 	rppb "github.com/brotherlogic/recordprocess/proto"
 	pb "github.com/brotherlogic/recordscores/proto"
-	"github.com/prometheus/client_golang/prometheus"
-	"github.com/prometheus/client_golang/prometheus/promauto"
 )
 
 var (
@@ -125,6 +126,26 @@ func (s *Server) ClientUpdate(ctx context.Context, req *rcpb.ClientUpdateRequest
 			}
 			scores.Scores = append(scores.Scores, newScore)
 			s.Log(fmt.Sprintf("Adding score to db: %v -> %v", newScore, latest))
+
+			sc := float32(resp.GetRecord().GetRelease().GetRating())
+			count := float32(1)
+			for _, subscore := range subscores {
+				sc += float32(subscore.GetRating())
+				count++
+			}
+
+			client.UpdateRecord(ctx, &rcpb.UpdateRecordRequest{
+				Reason: "scores-push",
+				Update: &rcpb.Record{
+					Release: &gdpb.Release{
+						InstanceId: resp.GetRecord().GetRelease().GetInstanceId(),
+					},
+					Metadata: &rcpb.ReleaseMetadata{
+						OverallScore: sc / count,
+					},
+				},
+			})
+
 			return &rcpb.ClientUpdateResponse{}, s.save(ctx, scores)
 		}
 	}
