@@ -110,6 +110,10 @@ func (s *Server) ClientUpdate(ctx context.Context, req *rcpb.ClientUpdateRequest
 			return nil, err
 		}
 		loaded = true
+
+		for _, subsc := range subscores {
+			scores.Scores = append(scores.Scores, subsc)
+		}
 	}
 
 	// Do we need to add the current score
