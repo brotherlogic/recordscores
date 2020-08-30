@@ -12,6 +12,15 @@ import (
 	rcpb "github.com/brotherlogic/recordcollection/proto"
 	rppb "github.com/brotherlogic/recordprocess/proto"
 	pb "github.com/brotherlogic/recordscores/proto"
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promauto"
+)
+
+var (
+	scores = promauto.NewGauge(prometheus.GaugeOpts{
+		Name: "recordscores_scores",
+		Help: "The size of the score list",
+	})
 )
 
 const (
@@ -20,6 +29,7 @@ const (
 )
 
 func (s *Server) save(ctx context.Context, scores *pb.Scores) error {
+	scores.Set(float64(len(scores)))
 	return s.KSclient.Save(ctx, SCORES, scores)
 }
 
@@ -35,6 +45,7 @@ func (s *Server) load(ctx context.Context) (*pb.Scores, error) {
 		return nil, err
 	}
 	scores := data.(*pb.Scores)
+	scores.Set(float64(len(scores)))
 
 	return scores, nil
 }
