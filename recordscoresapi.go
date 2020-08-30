@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"strings"
+	"time"
 
 	"golang.org/x/net/context"
 	"google.golang.org/grpc/codes"
@@ -16,6 +18,10 @@ const (
 	// SCORES - All the record scores
 	SCORES = "/github.com/brotherlogic/recordscores/scores"
 )
+
+func (s *Server) save(ctx context.Context, scores *pb.Scores) error {
+	return s.KSclient.Save(ctx, SCORES, scores)
+}
 
 func (s *Server) load(ctx context.Context) (*pb.Scores, error) {
 	data, _, err := s.KSclient.Read(ctx, SCORES, &pb.Scores{})
@@ -67,14 +73,54 @@ func (s *Server) ClientUpdate(ctx context.Context, req *rcpb.ClientUpdateRequest
 		}
 	}
 
+	loaded := false
 	if len(subscores) == 0 {
 		//Seed the scores
 		subscores, err = s.readScores(ctx, req.GetInstanceId())
 		if err != nil {
 			return nil, err
 		}
+		loaded = true
 	}
 
-	s.Log(fmt.Sprintf("Updating score for %v (%v scores in the db)", req.GetInstanceId(), len(subscores)))
+	// Do we need to add the current score
+	conn, err := s.FDialServer(ctx, "recordcollection")
+	if err != nil {
+		return nil, err
+	}
+	client := rcpb.NewRecordCollectionServiceClient(conn)
+
+	resp, err := client.GetRecord(ctx, &rcpb.GetRecordRequest{InstanceId: req.GetInstanceId()})
+	if err != nil {
+		return nil, err
+	}
+
+	if resp.GetRecord().GetRelease().GetRating() > 0 && !strings.HasPrefix(resp.GetRecord().GetMetadata().GetCategory().String(), "PRE") {
+		latest := ""
+		latestTime := int64(0)
+		for _, score := range subscores {
+			if score.GetScoreTime() > latestTime {
+				latest = score.GetCategory().String()
+				latestTime = score.GetScoreTime()
+			}
+		}
+
+		if resp.GetRecord().GetMetadata().GetCategory().String() != latest {
+			newScore := &pb.Score{
+				ScoreTime:  time.Now().Unix(),
+				Rating:     resp.GetRecord().GetRelease().GetRating(),
+				Category:   resp.GetRecord().GetMetadata().GetCategory(),
+				InstanceId: resp.GetRecord().GetRelease().GetInstanceId(),
+			}
+			scores.Scores = append(scores.Scores, newScore)
+			s.Log(fmt.Sprintf("Adding score to db: %v -> %v", newScore, latest))
+			return &rcpb.ClientUpdateResponse{}, s.save(ctx, scores)
+		}
+	}
+
+	if loaded {
+		return &rcpb.ClientUpdateResponse{}, s.save(ctx, scores)
+	}
+
 	return &rcpb.ClientUpdateResponse{}, nil
 }
