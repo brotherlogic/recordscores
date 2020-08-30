@@ -71,6 +71,23 @@ func (s *Server) readScores(ctx context.Context, iid int32) ([]*pb.Score, error)
 	return scores, nil
 }
 
+//GetScore gets a score
+func (s *Server) GetScore(ctx context.Context, req *pb.GetScoreRequest) (*pb.GetScoreResponse, error) {
+	scores, err := s.load(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	subscores := []*pb.Score{}
+	for _, score := range scores.GetScores() {
+		if score.GetInstanceId() == req.GetInstanceId() {
+			subscores = append(subscores, score)
+		}
+	}
+
+	return &pb.GetScoreResponse{Scores: subscores}, nil
+}
+
 //ClientUpdate on an updated record
 func (s *Server) ClientUpdate(ctx context.Context, req *rcpb.ClientUpdateRequest) (*rcpb.ClientUpdateResponse, error) {
 	scores, err := s.load(ctx)
