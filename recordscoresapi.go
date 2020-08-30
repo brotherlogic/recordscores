@@ -17,7 +17,7 @@ import (
 )
 
 var (
-	scores = promauto.NewGauge(prometheus.GaugeOpts{
+	scoresGauge = promauto.NewGauge(prometheus.GaugeOpts{
 		Name: "recordscores_scores",
 		Help: "The size of the score list",
 	})
@@ -29,7 +29,7 @@ const (
 )
 
 func (s *Server) save(ctx context.Context, scores *pb.Scores) error {
-	scores.Set(float64(len(scores)))
+	scoresGauge.Set(float64(len(scores.GetScores())))
 	return s.KSclient.Save(ctx, SCORES, scores)
 }
 
@@ -45,7 +45,7 @@ func (s *Server) load(ctx context.Context) (*pb.Scores, error) {
 		return nil, err
 	}
 	scores := data.(*pb.Scores)
-	scores.Set(float64(len(scores)))
+	scoresGauge.Set(float64(len(scores.GetScores())))
 
 	return scores, nil
 }
