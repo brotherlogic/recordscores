@@ -128,7 +128,7 @@ func (s *Server) ClientUpdate(ctx context.Context, req *rcpb.ClientUpdateRequest
 		return nil, err
 	}
 
-	if resp.GetRecord().GetRelease().GetRating() > 0 && !strings.HasPrefix(resp.GetRecord().GetMetadata().GetCategory().String(), "PRE") {
+	if resp.GetRecord().GetRelease().GetRating() > 0 && !strings.HasPrefix(resp.GetRecord().GetMetadata().GetCategory().String(), "PRE") && resp.GetRecord().GetMetadata().GetCategory() != rcpb.ReleaseMetadata_UNLISTENED {
 		latest := ""
 		latestTime := int64(0)
 		for _, score := range subscores {
