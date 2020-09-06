@@ -121,6 +121,7 @@ func (s *Server) ClientUpdate(ctx context.Context, req *rcpb.ClientUpdateRequest
 	if err != nil {
 		return nil, err
 	}
+	defer conn.Close()
 	client := rcpb.NewRecordCollectionServiceClient(conn)
 
 	resp, err := client.GetRecord(ctx, &rcpb.GetRecordRequest{InstanceId: req.GetInstanceId()})
