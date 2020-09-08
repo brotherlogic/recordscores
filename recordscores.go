@@ -19,6 +19,9 @@ import (
 //Server main server type
 type Server struct {
 	*goserver.GoServer
+	returnScore  int32
+	returnRecord *rcpb.Record
+	returnUpdate int32
 }
 
 // Init builds the server
@@ -58,6 +61,10 @@ func (s *Server) GetState() []*pbg.State {
 }
 
 func (s *Server) getRecord(ctx context.Context, id int32) (*rcpb.Record, error) {
+	if s.returnRecord != nil {
+		return s.returnRecord, nil
+	}
+
 	conn, err := s.FDialServer(ctx, "recordcollection")
 	if err != nil {
 		return nil, err
@@ -73,6 +80,9 @@ func (s *Server) getRecord(ctx context.Context, id int32) (*rcpb.Record, error) 
 }
 
 func (s *Server) updateOverallScore(ctx context.Context, id int32, score float32) error {
+	if s.returnUpdate > 0 {
+		return nil
+	}
 	conn, err := s.FDialServer(ctx, "recordcollection")
 	if err != nil {
 		return err

@@ -51,6 +51,10 @@ func (s *Server) load(ctx context.Context) (*pb.Scores, error) {
 }
 
 func (s *Server) readScores(ctx context.Context, iid int32) ([]*pb.Score, error) {
+	if s.returnScore > 0 {
+		return []*pb.Score{&pb.Score{Rating: s.returnScore}}, nil
+	}
+
 	conn, err := s.FDialServer(ctx, "recordprocess")
 	if err != nil {
 		return nil, err
