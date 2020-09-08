@@ -10,6 +10,7 @@ import (
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 
+	gdpb "github.com/brotherlogic/godiscogs"
 	pbg "github.com/brotherlogic/goserver/proto"
 	rcpb "github.com/brotherlogic/recordcollection/proto"
 	pb "github.com/brotherlogic/recordscores/proto"
@@ -54,6 +55,44 @@ func (s *Server) GetState() []*pbg.State {
 	return []*pbg.State{
 		&pbg.State{Key: "magic", Value: int64(13)},
 	}
+}
+
+func (s *Server) getRecord(ctx context.Context, id int32) (*rcpb.Record, error) {
+	conn, err := s.FDialServer(ctx, "recordcollection")
+	if err != nil {
+		return nil, err
+	}
+	defer conn.Close()
+	client := rcpb.NewRecordCollectionServiceClient(conn)
+
+	resp, err := client.GetRecord(ctx, &rcpb.GetRecordRequest{InstanceId: id})
+	if err != nil {
+		return nil, err
+	}
+	return resp.GetRecord(), nil
+}
+
+func (s *Server) updateOverallScore(ctx context.Context, id int32, score float32) error {
+	conn, err := s.FDialServer(ctx, "recordcollection")
+	if err != nil {
+		return err
+	}
+	defer conn.Close()
+	client := rcpb.NewRecordCollectionServiceClient(conn)
+
+	_, err = client.UpdateRecord(ctx, &rcpb.UpdateRecordRequest{
+		Reason: "scores-push",
+		Update: &rcpb.Record{
+			Release: &gdpb.Release{
+				InstanceId: id,
+			},
+			Metadata: &rcpb.ReleaseMetadata{
+				OverallScore: score,
+			},
+		},
+	})
+
+	return err
 }
 
 func main() {
