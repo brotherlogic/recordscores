@@ -1,5 +1,6 @@
 *~
 recordscores
+recordscores_cli/recordscores_cli
 .test
 
 testing
