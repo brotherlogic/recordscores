@@ -12,7 +12,6 @@ import (
 	"google.golang.org/grpc/status"
 
 	rcpb "github.com/brotherlogic/recordcollection/proto"
-	rppb "github.com/brotherlogic/recordprocess/proto"
 	pb "github.com/brotherlogic/recordscores/proto"
 )
 
@@ -47,30 +46,6 @@ func (s *Server) load(ctx context.Context) (*pb.Scores, error) {
 	scores := data.(*pb.Scores)
 	scoresGauge.Set(float64(len(scores.GetScores())))
 
-	return scores, nil
-}
-
-func (s *Server) readScores(ctx context.Context, iid int32) ([]*pb.Score, error) {
-	if s.returnScore > 0 {
-		return []*pb.Score{&pb.Score{Rating: s.returnScore}}, nil
-	}
-
-	conn, err := s.FDialServer(ctx, "recordprocess")
-	if err != nil {
-		return nil, err
-	}
-	defer conn.Close()
-
-	client := rppb.NewScoreServiceClient(conn)
-	res, err := client.GetScore(ctx, &rppb.GetScoreRequest{InstanceId: iid})
-	if err != nil {
-		return nil, err
-	}
-
-	scores := []*pb.Score{}
-	for _, rs := range res.GetScores() {
-		scores = append(scores, &pb.Score{InstanceId: rs.GetInstanceId(), Rating: rs.GetRating(), Category: rs.GetCategory(), ScoreTime: rs.GetScoreTime()})
-	}
 	return scores, nil
 }
 
