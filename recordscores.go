@@ -20,9 +20,11 @@ import (
 //Server main server type
 type Server struct {
 	*goserver.GoServer
-	returnScore  int32
-	returnRecord *rcpb.Record
-	returnUpdate int32
+	returnScore     int32
+	returnNilScore  bool
+	returnRecord    *rcpb.Record
+	returnNilRecord bool
+	returnUpdate    int32
 }
 
 // Init builds the server
@@ -57,11 +59,14 @@ func (s *Server) Mote(ctx context.Context, master bool) error {
 // GetState gets the state of the server
 func (s *Server) GetState() []*pbg.State {
 	return []*pbg.State{
-		&pbg.State{Key: "magic", Value: int64(13)},
+		&pbg.State{Key: "magic", Value: int64(123)},
 	}
 }
 
 func (s *Server) getRecord(ctx context.Context, id int32) (*rcpb.Record, error) {
+	if s.returnNilRecord {
+		return nil, fmt.Errorf("Built to fail")
+	}
 	if s.returnRecord != nil {
 		return s.returnRecord, nil
 	}
@@ -107,6 +112,9 @@ func (s *Server) updateOverallScore(ctx context.Context, id int32, score float32
 }
 
 func (s *Server) readScores(ctx context.Context, iid int32) ([]*pb.Score, error) {
+	if s.returnNilScore {
+		return nil, fmt.Errorf("Built to fail")
+	}
 	if s.returnScore > 0 {
 		return []*pb.Score{&pb.Score{Rating: s.returnScore}}, nil
 	}
