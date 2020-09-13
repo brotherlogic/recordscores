@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"math"
 	"testing"
 	"time"
 
@@ -83,6 +84,29 @@ func TestBasicInteraction(t *testing.T) {
 
 	s.returnScore = 4
 	s.returnRecord = &rcpb.Record{Release: &gdpb.Release{InstanceId: int32(12), Rating: 4}, Metadata: &rcpb.ReleaseMetadata{Category: rcpb.ReleaseMetadata_SOPHMORE}}
+	s.returnUpdate = 2
+	s.GoServer.KSclient.Save(context.Background(), SCORES, &pb.Scores{Scores: []*pb.Score{&pb.Score{InstanceId: 12, Category: rcpb.ReleaseMetadata_PROFESSOR, ScoreTime: time.Now().Unix()}}})
+
+	_, err := s.ClientUpdate(context.Background(), &rcpb.ClientUpdateRequest{InstanceId: int32(12)})
+	if err != nil {
+		t.Fatalf("Update did not work: %v", err)
+	}
+
+	scores, err := s.GetScore(context.Background(), &pb.GetScoreRequest{InstanceId: int32(12)})
+	if err != nil {
+		t.Fatalf("Get Score did not work: %v", err)
+	}
+
+	if len(scores.GetScores()) == 0 {
+		t.Errorf("Did not get any scores: %v", scores)
+	}
+}
+
+func TestBasicInteractionWithNaN(t *testing.T) {
+	s := InitTest()
+
+	s.returnScore = 4
+	s.returnRecord = &rcpb.Record{Release: &gdpb.Release{InstanceId: int32(12), Rating: 4}, Metadata: &rcpb.ReleaseMetadata{Category: rcpb.ReleaseMetadata_PROFESSOR, OverallScore: float32(math.NaN())}}
 	s.returnUpdate = 2
 	s.GoServer.KSclient.Save(context.Background(), SCORES, &pb.Scores{Scores: []*pb.Score{&pb.Score{InstanceId: 12, Category: rcpb.ReleaseMetadata_PROFESSOR, ScoreTime: time.Now().Unix()}}})
 
