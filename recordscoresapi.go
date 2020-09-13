@@ -138,7 +138,7 @@ func (s *Server) ClientUpdate(ctx context.Context, req *rcpb.ClientUpdateRequest
 	}
 
 	// Update the score if it's blank
-	if math.IsNaN(float64(record.GetMetadata().GetOverallScore())) {
+	if math.IsNaN(float64(record.GetMetadata().GetOverallScore())) && len(subscores) > 0 {
 		sc := float32(0)
 		count := float32(0)
 		for _, subscore := range subscores {
