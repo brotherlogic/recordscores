@@ -19,6 +19,7 @@ message Score {
 
 message GetScoreRequest {
   int32 instance_id = 1;
+  recordcollection.ReleaseMetadata.Category category = 2;
 }
 
 message GetScoreResponse {

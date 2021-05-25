@@ -62,6 +62,9 @@ func (s *Server) GetScore(ctx context.Context, req *pb.GetScoreRequest) (*pb.Get
 		if score.GetInstanceId() == req.GetInstanceId() {
 			subscores = append(subscores, score)
 		}
+		if score.GetCategory() != rcpb.ReleaseMetadata_UNKNOWN && score.GetCategory() == req.GetCategory() {
+			subscores = append(subscores, score)
+		}
 	}
 
 	return &pb.GetScoreResponse{Scores: subscores}, nil

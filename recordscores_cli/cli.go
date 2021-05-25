@@ -8,6 +8,7 @@ import (
 
 	"github.com/brotherlogic/goserver/utils"
 
+	rcpb "github.com/brotherlogic/recordcollection/proto"
 	pb "github.com/brotherlogic/recordscores/proto"
 
 	//Needed to pull in gzip encoding init
@@ -48,7 +49,14 @@ func main() {
 				}
 			}
 		}
-
+	case "offline":
+		res, err := client.GetScore(ctx, &pb.GetScoreRequest{Category: rcpb.ReleaseMetadata_SOLD_OFFLINE})
+		if err != nil {
+			log.Fatalf("Error on Add Record: %v", err)
+		}
+		fmt.Printf("%v Scores\n", len(res.GetScores()))
+		for i, score := range res.GetScores() {
+			fmt.Printf("%v. %v\n", i, score)
+		}
 	}
-
 }
