@@ -58,9 +58,7 @@ func (s *Server) Mote(ctx context.Context, master bool) error {
 
 // GetState gets the state of the server
 func (s *Server) GetState() []*pbg.State {
-	return []*pbg.State{
-		&pbg.State{Key: "magic", Value: int64(123)},
-	}
+	return []*pbg.State{}
 }
 
 func (s *Server) getRecord(ctx context.Context, id int32) (*rcpb.Record, error) {
