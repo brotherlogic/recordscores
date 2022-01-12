@@ -43,6 +43,18 @@ func main() {
 				if err != nil {
 					log.Fatalf("Error on Add Record: %v", err)
 				}
+
+				conn2, err := utils.LFDialServer(ctx, "recordcollection")
+				if err != nil {
+					log.Fatalf("Cannot reach rc: %v", err)
+				}
+				rcclient := rcpb.NewRecordCollectionServiceClient(conn2)
+				rec, err := rcclient.GetRecord(ctx, &rcpb.GetRecordRequest{InstanceId: int32(*id)})
+				if err != nil {
+					log.Fatalf("Cannot find record: %v", err)
+				}
+
+				fmt.Printf("%v - %v\n", rec.GetRecord().GetRelease().GetArtists()[0].GetName(), rec.GetRecord().GetRelease().GetTitle())
 				fmt.Printf("%v Scores\n", len(res.GetScores()))
 				for i, score := range res.GetScores() {
 					fmt.Printf("%v. %v\n", i, score)
