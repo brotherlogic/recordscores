@@ -17,6 +17,21 @@ message Score {
   int64 score_time = 4;
 }
 
+message ComputedScore {
+  int32 base_rating = 1;
+  repeated ScoreAdjustment adjustments = 2;
+  float overall = 3;
+}
+
+message ScoreAdjustment {
+  enum AdjustmentType {
+    IGNORED_ADJUSTMENT = 0;
+    OTHER_VERSIONS_ADJUSTMENT = 1;
+  }
+  AdjustmentType type = 1;
+  float value_change = 2;
+}
+
 message GetScoreRequest {
   int32 instance_id = 1;
   recordcollection.ReleaseMetadata.Category category = 2;
@@ -24,6 +39,7 @@ message GetScoreRequest {
 
 message GetScoreResponse {
   repeated Score scores = 1;
+  ComputedScore computed_score = 2;
 }
 
 service RecordScoreService {

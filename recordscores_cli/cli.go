@@ -47,6 +47,12 @@ func main() {
 				for i, score := range res.GetScores() {
 					fmt.Printf("%v. %v\n", i, score)
 				}
+				fmt.Printf("Base: %v\n", res.GetComputedScore().GetBaseRating())
+				for _, adjust := range res.GetComputedScore().GetAdjustments() {
+					fmt.Printf("Adju: %v [%v]\n", adjust.GetValueChange(), adjust.GetType())
+				}
+				fmt.Printf("--------\n")
+				fmt.Printf("Over: %v\n", res.GetComputedScore().GetOverall())
 			}
 		}
 	case "offline":
