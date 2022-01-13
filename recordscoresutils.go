@@ -3,6 +3,7 @@ package main
 import (
 	"golang.org/x/net/context"
 
+	rcpb "github.com/brotherlogic/recordcollection/proto"
 	pb "github.com/brotherlogic/recordscores/proto"
 )
 
@@ -14,7 +15,7 @@ func (s *Server) computeScore(ctx context.Context, iid int32, scores []*pb.Score
 
 	var cs *pb.ComputedScore
 	if rec.GetRelease().GetRating() > 0 {
-		cs = &pb.ComputedScore{BaseRating: rec.GetRelease().GetRating()}
+		cs = &pb.ComputedScore{BaseRating: rec.GetRelease().GetRating() * 2}
 	} else {
 		br := int32(0)
 		bt := int64(0)
@@ -25,14 +26,23 @@ func (s *Server) computeScore(ctx context.Context, iid int32, scores []*pb.Score
 			}
 		}
 
-		cs = &pb.ComputedScore{BaseRating: br}
+		cs = &pb.ComputedScore{BaseRating: br * 2}
 	}
 
-	if len(rec.GetRelease().GetOtherVersions()) > 0 {
-		cs.Adjustments = append(cs.Adjustments, &pb.ScoreAdjustment{
-			Type:        pb.ScoreAdjustment_OTHER_VERSIONS_ADJUSTMENT,
-			ValueChange: -0.5,
-		})
+	if rec.GetMetadata().GetKeep() != rcpb.ReleaseMetadata_KEEPER {
+		if len(rec.GetRelease().GetOtherVersions()) > 0 {
+			cs.Adjustments = append(cs.Adjustments, &pb.ScoreAdjustment{
+				Type:        pb.ScoreAdjustment_OTHER_VERSIONS_ADJUSTMENT,
+				ValueChange: -1,
+			})
+		}
+
+		if len(rec.GetRelease().GetDigitalVersions()) > 0 {
+			cs.Adjustments = append(cs.Adjustments, &pb.ScoreAdjustment{
+				Type:        pb.ScoreAdjustment_DIGITAL_VERSIONS_ADJUSTMENT,
+				ValueChange: -2,
+			})
+		}
 	}
 
 	overall := float32(cs.BaseRating)

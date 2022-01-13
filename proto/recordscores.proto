@@ -27,6 +27,7 @@ message ScoreAdjustment {
   enum AdjustmentType {
     IGNORED_ADJUSTMENT = 0;
     OTHER_VERSIONS_ADJUSTMENT = 1;
+    DIGITAL_VERSIONS_ADJUSTMENT = 2;
   }
   AdjustmentType type = 1;
   float value_change = 2;
