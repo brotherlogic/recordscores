@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strconv"
 
 	"github.com/brotherlogic/goserver/utils"
 
@@ -75,6 +76,13 @@ func main() {
 		fmt.Printf("%v Scores\n", len(res.GetScores()))
 		for i, score := range res.GetScores() {
 			fmt.Printf("%v. %v\n", i, score)
+		}
+	case "ping":
+		id, err := strconv.Atoi(os.Args[2])
+		sclient := rcpb.NewClientUpdateServiceClient(conn)
+		_, err = sclient.ClientUpdate(ctx, &rcpb.ClientUpdateRequest{InstanceId: int32(id)})
+		if err != nil {
+			log.Fatalf("Error on GET: %v", err)
 		}
 	}
 }

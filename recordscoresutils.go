@@ -24,7 +24,7 @@ func (s *Server) computeScore(ctx context.Context, iid int32, scores []*pb.Score
 	}
 
 	sort.SliceStable(scores, func(i, j int) bool {
-		return scores[i].GetScoreTime() < scores[j].GetScoreTime()
+		return scores[i].GetScoreTime() > scores[j].GetScoreTime()
 	})
 
 	s.Log(fmt.Sprintf("SCORESARE %v", scores))
