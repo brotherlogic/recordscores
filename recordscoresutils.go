@@ -57,6 +57,19 @@ func (s *Server) computeScore(ctx context.Context, iid int32, scores []*pb.Score
 				ValueChange: -5,
 			})
 		}
+
+		found := false
+		for _, sc := range scores {
+			if sc.GetCategory() == rcpb.ReleaseMetadata_LISTED_TO_SELL {
+				found = true
+			}
+		}
+		if found {
+			cs.Adjustments = append(cs.Adjustments, &pb.ScoreAdjustment{
+				Type:        pb.ScoreAdjustment_PREVIOUSY_SOLD_ADJUSTMENT,
+				ValueChange: -6,
+			})
+		}
 	}
 
 	overall := float32(cs.BaseRating)

@@ -29,6 +29,7 @@ message ScoreAdjustment {
     OTHER_VERSIONS_ADJUSTMENT = 1;
     DIGITAL_VERSIONS_ADJUSTMENT = 2;
     OWN_OTHER_ADJUSTMENT = 3;
+    PREVIOUSY_SOLD_ADJUSTMENT = 4;
   }
   AdjustmentType type = 1;
   float value_change = 2;
