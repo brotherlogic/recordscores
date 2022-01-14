@@ -110,6 +110,11 @@ func (s *Server) ClientUpdate(ctx context.Context, req *rcpb.ClientUpdateRequest
 		return nil, err
 	}
 
+	score, err := s.computeScore(ctx, req.GetInstanceId(), subscores)
+	if err == nil && score.GetOverall() != record.GetMetadata().GetOverallScore() {
+		s.updateOverallScore(ctx, req.GetInstanceId(), score.GetOverall())
+	}
+
 	if record.GetRelease().GetRating() > 0 && !strings.HasPrefix(record.GetMetadata().GetCategory().String(), "PRE") && record.GetMetadata().GetCategory() != rcpb.ReleaseMetadata_UNLISTENED {
 		latest := ""
 		latestTime := int64(0)
@@ -129,15 +134,6 @@ func (s *Server) ClientUpdate(ctx context.Context, req *rcpb.ClientUpdateRequest
 			}
 			scores.Scores = append(scores.Scores, newScore)
 			s.Log(fmt.Sprintf("Adding score to db: %v -> %v", newScore, latest))
-
-			sc := float32(record.GetRelease().GetRating())
-			count := float32(1)
-			for _, subscore := range subscores {
-				sc += float32(subscore.GetRating())
-				count++
-			}
-
-			s.updateOverallScore(ctx, record.GetRelease().GetInstanceId(), sc/count)
 
 			return &rcpb.ClientUpdateResponse{}, s.save(ctx, scores)
 		}

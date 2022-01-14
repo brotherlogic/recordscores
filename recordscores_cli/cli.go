@@ -84,5 +84,30 @@ func main() {
 		if err != nil {
 			log.Fatalf("Error on GET: %v", err)
 		}
+
+	case "fullping":
+		conn2, err2 := utils.LFDialServer(ctx, "recordcollection")
+		if err2 != nil {
+			log.Fatalf("Can't dial RC: %v", err2)
+		}
+		rcclient := rcpb.NewRecordCollectionServiceClient(conn2)
+		ids, err := rcclient.QueryRecords(ctx, &rcpb.QueryRecordsRequest{Query: &rcpb.QueryRecordsRequest_FolderId{242017}})
+		if err != nil {
+			log.Fatalf("Err: %v", err)
+		}
+
+		sclient := rcpb.NewClientUpdateServiceClient(conn)
+
+		for _, id := range ids.GetInstanceIds() {
+			_, err = sclient.ClientUpdate(ctx, &rcpb.ClientUpdateRequest{InstanceId: int32(id)})
+			if err != nil {
+				log.Fatalf("Error on GET: %v", err)
+			}
+			sc, err := client.GetScore(ctx, &pb.GetScoreRequest{InstanceId: id})
+			if err != nil {
+				log.Fatalf("Error on getScore %v", err)
+			}
+			fmt.Printf("%v - %v\n", sc.GetComputedScore().GetOverall(), id)
+		}
 	}
 }
