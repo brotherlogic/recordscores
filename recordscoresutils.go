@@ -50,6 +50,13 @@ func (s *Server) computeScore(ctx context.Context, iid int32, scores []*pb.Score
 				ValueChange: -2,
 			})
 		}
+
+		if rec.GetMetadata().GetMatch() == rcpb.ReleaseMetadata_FULL_MATCH {
+			cs.Adjustments = append(cs.Adjustments, &pb.ScoreAdjustment{
+				Type:        pb.ScoreAdjustment_OWN_OTHER_ADJUSTMENT,
+				ValueChange: -5,
+			})
+		}
 	}
 
 	overall := float32(cs.BaseRating)
