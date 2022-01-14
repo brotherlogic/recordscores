@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"sort"
 
 	"golang.org/x/net/context"
@@ -25,6 +26,8 @@ func (s *Server) computeScore(ctx context.Context, iid int32, scores []*pb.Score
 	sort.SliceStable(scores, func(i, j int) bool {
 		return scores[i].GetScoreTime() < scores[j].GetScoreTime()
 	})
+
+	s.Log(fmt.Sprintf("SCORESARE %v", scores))
 
 	sum := float32(0)
 	for i := 0; i < min(3, len(scores)); i++ {
