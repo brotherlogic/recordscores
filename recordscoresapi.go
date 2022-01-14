@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"math"
 	"strings"
 	"time"
 
@@ -140,19 +139,6 @@ func (s *Server) ClientUpdate(ctx context.Context, req *rcpb.ClientUpdateRequest
 	}
 
 	if loaded {
-		return &rcpb.ClientUpdateResponse{}, s.save(ctx, scores)
-	}
-
-	// Update the score if it's blank
-	if math.IsNaN(float64(record.GetMetadata().GetOverallScore())) && len(subscores) > 0 {
-		sc := float32(0)
-		count := float32(0)
-		for _, subscore := range subscores {
-			sc += float32(subscore.GetRating())
-			count++
-		}
-
-		s.updateOverallScore(ctx, record.GetRelease().GetInstanceId(), sc/count)
 		return &rcpb.ClientUpdateResponse{}, s.save(ctx, scores)
 	}
 
