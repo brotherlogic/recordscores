@@ -1,11 +1,20 @@
 package main
 
 import (
+	"sort"
+
 	"golang.org/x/net/context"
 
 	rcpb "github.com/brotherlogic/recordcollection/proto"
 	pb "github.com/brotherlogic/recordscores/proto"
 )
+
+func min(i, j int) int {
+	if i < j {
+		return i
+	}
+	return j
+}
 
 func (s *Server) computeScore(ctx context.Context, iid int32, scores []*pb.Score) (*pb.ComputedScore, error) {
 	rec, err := s.getRecord(ctx, iid)
@@ -13,21 +22,16 @@ func (s *Server) computeScore(ctx context.Context, iid int32, scores []*pb.Score
 		return nil, err
 	}
 
-	var cs *pb.ComputedScore
-	if rec.GetRelease().GetRating() > 0 {
-		cs = &pb.ComputedScore{BaseRating: rec.GetRelease().GetRating() * 2}
-	} else {
-		br := int32(0)
-		bt := int64(0)
-		for _, score := range scores {
-			if score.GetScoreTime() > bt {
-				br = (score.GetRating())
-				bt = (score.GetScoreTime())
-			}
-		}
+	sort.SliceStable(scores, func(i, j int) bool {
+		return scores[i].GetScoreTime() < scores[j].GetScoreTime()
+	})
 
-		cs = &pb.ComputedScore{BaseRating: br * 2}
+	sum := float32(0)
+	for i := 0; i < min(3, len(scores)); i++ {
+		sum += float32(scores[i].GetRating())
 	}
+
+	cs := &pb.ComputedScore{BaseRating: int32(2 * (sum / float32(min(3, len(scores)))))}
 
 	if rec.GetMetadata().GetKeep() != rcpb.ReleaseMetadata_KEEPER {
 		if len(rec.GetRelease().GetOtherVersions()) > 0 {
