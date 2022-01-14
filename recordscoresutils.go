@@ -65,5 +65,10 @@ func (s *Server) computeScore(ctx context.Context, iid int32, scores []*pb.Score
 	}
 	cs.Overall = overall
 
+	// Can't use the default value here - so bump it
+	if cs.Overall == 0 {
+		cs.Overall = 0.1
+	}
+
 	return cs, nil
 }
