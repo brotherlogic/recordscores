@@ -37,39 +37,50 @@ func (s *Server) computeScore(ctx context.Context, iid int32, scores []*pb.Score
 	cs := &pb.ComputedScore{BaseRating: int32(2 * (sum / float32(min(3, len(scores)))))}
 
 	if rec.GetMetadata().GetKeep() != rcpb.ReleaseMetadata_KEEPER {
-		if len(rec.GetRelease().GetOtherVersions()) > 0 {
-			cs.Adjustments = append(cs.Adjustments, &pb.ScoreAdjustment{
-				Type:        pb.ScoreAdjustment_OTHER_VERSIONS_ADJUSTMENT,
-				ValueChange: -1,
-			})
-		}
+		if rec.GetMetadata().GetKeep() != rcpb.ReleaseMetadata_DIGITAL_KEEPER {
+			if len(rec.GetRelease().GetOtherVersions()) > 0 {
+				cs.Adjustments = append(cs.Adjustments, &pb.ScoreAdjustment{
+					Type:        pb.ScoreAdjustment_OTHER_VERSIONS_ADJUSTMENT,
+					ValueChange: -1,
+				})
+			}
 
-		if len(rec.GetRelease().GetDigitalVersions()) > 0 {
-			cs.Adjustments = append(cs.Adjustments, &pb.ScoreAdjustment{
-				Type:        pb.ScoreAdjustment_DIGITAL_VERSIONS_ADJUSTMENT,
-				ValueChange: -2,
-			})
+			if len(rec.GetRelease().GetDigitalVersions()) > 0 {
+				cs.Adjustments = append(cs.Adjustments, &pb.ScoreAdjustment{
+					Type:        pb.ScoreAdjustment_DIGITAL_VERSIONS_ADJUSTMENT,
+					ValueChange: -2,
+				})
+			}
+
+			found := false
+			for _, sc := range scores {
+				if sc.GetCategory() == rcpb.ReleaseMetadata_LISTED_TO_SELL {
+					found = true
+				}
+			}
+			if found {
+				cs.Adjustments = append(cs.Adjustments, &pb.ScoreAdjustment{
+					Type:        pb.ScoreAdjustment_PREVIOUSY_SOLD_ADJUSTMENT,
+					ValueChange: -6,
+				})
+			}
 		}
 
 		if rec.GetMetadata().GetMatch() == rcpb.ReleaseMetadata_FULL_MATCH {
-			cs.Adjustments = append(cs.Adjustments, &pb.ScoreAdjustment{
-				Type:        pb.ScoreAdjustment_OWN_OTHER_ADJUSTMENT,
-				ValueChange: -5,
-			})
-		}
-
-		found := false
-		for _, sc := range scores {
-			if sc.GetCategory() == rcpb.ReleaseMetadata_LISTED_TO_SELL {
-				found = true
+			if rec.GetMetadata().GetKeep() == rcpb.ReleaseMetadata_DIGITAL_KEEPER {
+				// Harsher adjustment if we've added this contigency
+				cs.Adjustments = append(cs.Adjustments, &pb.ScoreAdjustment{
+					Type:        pb.ScoreAdjustment_OWN_OTHER_ADJUSTMENT,
+					ValueChange: -10,
+				})
+			} else {
+				cs.Adjustments = append(cs.Adjustments, &pb.ScoreAdjustment{
+					Type:        pb.ScoreAdjustment_OWN_OTHER_ADJUSTMENT,
+					ValueChange: -5,
+				})
 			}
 		}
-		if found {
-			cs.Adjustments = append(cs.Adjustments, &pb.ScoreAdjustment{
-				Type:        pb.ScoreAdjustment_PREVIOUSY_SOLD_ADJUSTMENT,
-				ValueChange: -6,
-			})
-		}
+
 	}
 
 	overall := float32(cs.BaseRating)
