@@ -61,7 +61,7 @@ func (s *Server) computeScore(ctx context.Context, iid int32, scores []*pb.Score
 			if found {
 				cs.Adjustments = append(cs.Adjustments, &pb.ScoreAdjustment{
 					Type:        pb.ScoreAdjustment_PREVIOUSY_SOLD_ADJUSTMENT,
-					ValueChange: -6,
+					ValueChange: -2,
 				})
 			}
 		}
