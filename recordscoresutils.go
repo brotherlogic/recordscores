@@ -14,6 +14,7 @@ import (
 var (
 	scoreCount = prometheus.NewGaugeVec(prometheus.GaugeOpts{
 		Name: "recordscores_score_counts",
+		Help: "The size of the score list",
 	}, []string{"folder", "score"})
 )
 
