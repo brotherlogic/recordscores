@@ -34,6 +34,7 @@ const (
 func (s *Server) save(ctx context.Context, scores *pb.Scores) error {
 	s.metrics(ctx, scores)
 	scoresGauge.Set(float64(len(scores.GetScores())))
+	s.metrics(ctx, scores)
 	return s.KSclient.Save(ctx, SCORES, scores)
 }
 
