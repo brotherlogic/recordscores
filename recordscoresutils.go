@@ -23,6 +23,8 @@ func (s *Server) metrics(ctx context.Context, scores *pb.Scores) {
 	for _, score := range scores.GetLastScore() {
 		scoreCount.With(prometheus.Labels{"folder": fmt.Sprintf("%v", score.GetCurrFolder()), "score": fmt.Sprintf("%v", score.GetOverall())}).Inc()
 	}
+
+	s.CtxLog(ctx, fmt.Sprintf("Read for %v", len(scores.GetLastScore())))
 }
 
 func min(i, j int) int {
