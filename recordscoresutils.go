@@ -51,7 +51,10 @@ func (s *Server) computeScore(ctx context.Context, iid int32, scores []*pb.Score
 		sum += float32(scores[i].GetRating())
 	}
 
-	cs := &pb.ComputedScore{BaseRating: int32(2 * (sum / float32(min(3, len(scores)))))}
+	cs := &pb.ComputedScore{
+		BaseRating: int32(2 * (sum / float32(min(3, len(scores))))),
+		CurrFolder: rec.GetRelease().GetFolderId(),
+	}
 
 	if rec.GetMetadata().GetKeep() != rcpb.ReleaseMetadata_KEEPER {
 		if rec.GetMetadata().GetKeep() != rcpb.ReleaseMetadata_DIGITAL_KEEPER {
