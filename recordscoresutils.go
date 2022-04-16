@@ -18,10 +18,10 @@ var (
 )
 
 func (s *Server) metrics(ctx context.Context, scores *pb.Scores) {
-	scoreCount.Reset()
+	//scoreCount.Reset()
 
 	for _, score := range scores.GetLastScore() {
-		scoreCount.With(prometheus.Labels{"folder": fmt.Sprintf("%v", score.GetCurrFolder()), "score": fmt.Sprintf("%v", score.GetOverall())}).Inc()
+		scoreCount.With(prometheus.Labels{"folder": fmt.Sprintf("%v", score.GetCurrFolder()), "score": fmt.Sprintf("%v", score.GetOverall())}).Set(float64(1))
 	}
 
 	s.CtxLog(ctx, fmt.Sprintf("Read for %v", len(scores.GetLastScore())))
