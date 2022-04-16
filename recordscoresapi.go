@@ -20,6 +20,10 @@ var (
 		Name: "recordscores_scores",
 		Help: "The size of the score list",
 	})
+	overallScores = promauto.NewGauge(prometheus.GaugeOpts{
+		Name: "recordscores_overall_scores",
+		Help: "The size of the score list",
+	})
 )
 
 const (
@@ -46,6 +50,7 @@ func (s *Server) load(ctx context.Context) (*pb.Scores, error) {
 	}
 	scores := data.(*pb.Scores)
 	scoresGauge.Set(float64(len(scores.GetScores())))
+	overallScores.Set(float64(len(scores.GetLastScore())))
 
 	s.metrics(ctx, scores)
 	return scores, nil
