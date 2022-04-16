@@ -8,7 +8,23 @@ import (
 
 	rcpb "github.com/brotherlogic/recordcollection/proto"
 	pb "github.com/brotherlogic/recordscores/proto"
+	"github.com/prometheus/client_golang/prometheus"
 )
+
+var (
+	scoreCount = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+		Name: "recordscores_score_counts",
+	}, []string{"folder", "score"})
+)
+
+func (s *Server) metrics(ctx context.Context, scores *pb.Scores) {
+	scoreCount.Reset()
+	
+	counts := make(map[float32]int)
+	for _, score := range scores.GetLastScore() {
+		scoreCount.With("folder": fmt.Sprintf("%v", score.GetCurrFolder(), "score":fmt.Sprintf("%v", score.GetOverall()))).Inc()
+	}
+}
 
 func min(i, j int) int {
 	if i < j {

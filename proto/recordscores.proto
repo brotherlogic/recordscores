@@ -8,6 +8,7 @@ option go_package = "github.com/brotherlogic/recordscores/proto";
 
 message Scores {
   repeated Score scores = 1;
+  map<int32, ComputedScore> last_score = 2;
 }
 
 message Score {
@@ -21,6 +22,7 @@ message ComputedScore {
   int32 base_rating = 1;
   repeated ScoreAdjustment adjustments = 2;
   float overall = 3;
+  int32 curr_folder = 4;
 }
 
 message ScoreAdjustment {
