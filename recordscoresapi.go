@@ -52,6 +52,10 @@ func (s *Server) load(ctx context.Context) (*pb.Scores, error) {
 	scoresGauge.Set(float64(len(scores.GetScores())))
 	overallScores.Set(float64(len(scores.GetLastScore())))
 
+	if scores.GetLastScore() == nil {
+		scores.LastScore = make(map[int32]*pb.ComputedScore)
+	}
+
 	s.metrics(ctx, scores)
 	return scores, nil
 }
