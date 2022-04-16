@@ -77,7 +77,10 @@ func (s *Server) GetScore(ctx context.Context, req *pb.GetScoreRequest) (*pb.Get
 	if err != nil {
 		return nil, err
 	}
-	return &pb.GetScoreResponse{Scores: subscores, ComputedScore: cscore}, nil
+
+	scores.LastScore[req.GetInstanceId()] = cscore
+
+	return &pb.GetScoreResponse{Scores: subscores, ComputedScore: cscore}, s.save(ctx, scores)
 }
 
 //ClientUpdate on an updated record
