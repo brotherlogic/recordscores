@@ -9,24 +9,22 @@ import (
 	rcpb "github.com/brotherlogic/recordcollection/proto"
 	pb "github.com/brotherlogic/recordscores/proto"
 	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promauto"
 )
 
 var (
-	scoreCount = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+	scoreCount = promauto.NewGaugeVec(prometheus.GaugeOpts{
 		Name: "recordscores_score_counts",
 		Help: "The size of the score list",
 	}, []string{"folder", "score"})
 )
 
 func (s *Server) metrics(ctx context.Context, scores *pb.Scores) {
-	//scoreCount.Reset()
+	scoreCount.Reset()
 
 	for _, score := range scores.GetLastScore() {
-		s.CtxLog(ctx, fmt.Sprintf("Huh: %v", score))
-		scoreCount.With(prometheus.Labels{"folder": fmt.Sprintf("%v", score.GetCurrFolder()), "score": fmt.Sprintf("%v", score.GetOverall())}).Set(float64(1))
+		scoreCount.With(prometheus.Labels{"folder": fmt.Sprintf("%v", score.GetCurrFolder()), "score": fmt.Sprintf("%v", score.GetOverall())}).Inc()
 	}
-
-	s.CtxLog(ctx, fmt.Sprintf("Read for %v", len(scores.GetLastScore())))
 }
 
 func min(i, j int) int {
