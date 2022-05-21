@@ -86,7 +86,8 @@ func (s *Server) computeScore(ctx context.Context, iid int32, scores []*pb.Score
 			}
 		}
 
-		if rec.GetMetadata().GetMatch() == rcpb.ReleaseMetadata_FULL_MATCH {
+		if rec.GetMetadata().GetMatch() == rcpb.ReleaseMetadata_FULL_MATCH ||
+			rec.GetMetadata().GetMatch() == rcpb.ReleaseMetadata_PARTIAL_MATCH {
 			if rec.GetMetadata().GetKeep() == rcpb.ReleaseMetadata_DIGITAL_KEEPER {
 				// Harsher adjustment if we've added this contigency
 				cs.Adjustments = append(cs.Adjustments, &pb.ScoreAdjustment{
