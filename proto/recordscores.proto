@@ -23,6 +23,7 @@ message ComputedScore {
   repeated ScoreAdjustment adjustments = 2;
   float overall = 3;
   int32 curr_folder = 4;
+  recordcollection.PurchaseLocation location = 5;
 }
 
 message ScoreAdjustment {

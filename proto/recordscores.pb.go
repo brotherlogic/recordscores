@@ -212,10 +212,11 @@ type ComputedScore struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	BaseRating  int32              `protobuf:"varint,1,opt,name=base_rating,json=baseRating,proto3" json:"base_rating,omitempty"`
-	Adjustments []*ScoreAdjustment `protobuf:"bytes,2,rep,name=adjustments,proto3" json:"adjustments,omitempty"`
-	Overall     float32            `protobuf:"fixed32,3,opt,name=overall,proto3" json:"overall,omitempty"`
-	CurrFolder  int32              `protobuf:"varint,4,opt,name=curr_folder,json=currFolder,proto3" json:"curr_folder,omitempty"`
+	BaseRating  int32                   `protobuf:"varint,1,opt,name=base_rating,json=baseRating,proto3" json:"base_rating,omitempty"`
+	Adjustments []*ScoreAdjustment      `protobuf:"bytes,2,rep,name=adjustments,proto3" json:"adjustments,omitempty"`
+	Overall     float32                 `protobuf:"fixed32,3,opt,name=overall,proto3" json:"overall,omitempty"`
+	CurrFolder  int32                   `protobuf:"varint,4,opt,name=curr_folder,json=currFolder,proto3" json:"curr_folder,omitempty"`
+	Location    proto1.PurchaseLocation `protobuf:"varint,5,opt,name=location,proto3,enum=recordcollection.PurchaseLocation" json:"location,omitempty"`
 }
 
 func (x *ComputedScore) Reset() {
@@ -276,6 +277,13 @@ func (x *ComputedScore) GetCurrFolder() int32 {
 		return x.CurrFolder
 	}
 	return 0
+}
+
+func (x *ComputedScore) GetLocation() proto1.PurchaseLocation {
+	if x != nil {
+		return x.Location
+	}
+	return proto1.PurchaseLocation_LOCATION_UNKNOWN
 }
 
 type ScoreAdjustment struct {
@@ -476,7 +484,7 @@ var file_recordscores_proto_rawDesc = []byte{
 	0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0x2e, 0x43, 0x61, 0x74, 0x65, 0x67, 0x6f, 0x72,
 	0x79, 0x52, 0x08, 0x63, 0x61, 0x74, 0x65, 0x67, 0x6f, 0x72, 0x79, 0x12, 0x1d, 0x0a, 0x0a, 0x73,
 	0x63, 0x6f, 0x72, 0x65, 0x5f, 0x74, 0x69, 0x6d, 0x65, 0x18, 0x04, 0x20, 0x01, 0x28, 0x03, 0x52,
-	0x09, 0x73, 0x63, 0x6f, 0x72, 0x65, 0x54, 0x69, 0x6d, 0x65, 0x22, 0xac, 0x01, 0x0a, 0x0d, 0x43,
+	0x09, 0x73, 0x63, 0x6f, 0x72, 0x65, 0x54, 0x69, 0x6d, 0x65, 0x22, 0xec, 0x01, 0x0a, 0x0d, 0x43,
 	0x6f, 0x6d, 0x70, 0x75, 0x74, 0x65, 0x64, 0x53, 0x63, 0x6f, 0x72, 0x65, 0x12, 0x1f, 0x0a, 0x0b,
 	0x62, 0x61, 0x73, 0x65, 0x5f, 0x72, 0x61, 0x74, 0x69, 0x6e, 0x67, 0x18, 0x01, 0x20, 0x01, 0x28,
 	0x05, 0x52, 0x0a, 0x62, 0x61, 0x73, 0x65, 0x52, 0x61, 0x74, 0x69, 0x6e, 0x67, 0x12, 0x3f, 0x0a,
@@ -487,7 +495,11 @@ var file_recordscores_proto_rawDesc = []byte{
 	0x0a, 0x07, 0x6f, 0x76, 0x65, 0x72, 0x61, 0x6c, 0x6c, 0x18, 0x03, 0x20, 0x01, 0x28, 0x02, 0x52,
 	0x07, 0x6f, 0x76, 0x65, 0x72, 0x61, 0x6c, 0x6c, 0x12, 0x1f, 0x0a, 0x0b, 0x63, 0x75, 0x72, 0x72,
 	0x5f, 0x66, 0x6f, 0x6c, 0x64, 0x65, 0x72, 0x18, 0x04, 0x20, 0x01, 0x28, 0x05, 0x52, 0x0a, 0x63,
-	0x75, 0x72, 0x72, 0x46, 0x6f, 0x6c, 0x64, 0x65, 0x72, 0x22, 0x9a, 0x02, 0x0a, 0x0f, 0x53, 0x63,
+	0x75, 0x72, 0x72, 0x46, 0x6f, 0x6c, 0x64, 0x65, 0x72, 0x12, 0x3e, 0x0a, 0x08, 0x6c, 0x6f, 0x63,
+	0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x05, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x22, 0x2e, 0x72, 0x65,
+	0x63, 0x6f, 0x72, 0x64, 0x63, 0x6f, 0x6c, 0x6c, 0x65, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x50,
+	0x75, 0x72, 0x63, 0x68, 0x61, 0x73, 0x65, 0x4c, 0x6f, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52,
+	0x08, 0x6c, 0x6f, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x22, 0x9a, 0x02, 0x0a, 0x0f, 0x53, 0x63,
 	0x6f, 0x72, 0x65, 0x41, 0x64, 0x6a, 0x75, 0x73, 0x74, 0x6d, 0x65, 0x6e, 0x74, 0x12, 0x40, 0x0a,
 	0x04, 0x74, 0x79, 0x70, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x2c, 0x2e, 0x72, 0x65,
 	0x63, 0x6f, 0x72, 0x64, 0x73, 0x63, 0x6f, 0x72, 0x65, 0x73, 0x2e, 0x53, 0x63, 0x6f, 0x72, 0x65,
@@ -558,24 +570,26 @@ var file_recordscores_proto_goTypes = []interface{}{
 	(*GetScoreResponse)(nil),             // 6: recordscores.GetScoreResponse
 	nil,                                  // 7: recordscores.Scores.LastScoreEntry
 	(proto1.ReleaseMetadata_Category)(0), // 8: recordcollection.ReleaseMetadata.Category
+	(proto1.PurchaseLocation)(0),         // 9: recordcollection.PurchaseLocation
 }
 var file_recordscores_proto_depIdxs = []int32{
 	2,  // 0: recordscores.Scores.scores:type_name -> recordscores.Score
 	7,  // 1: recordscores.Scores.last_score:type_name -> recordscores.Scores.LastScoreEntry
 	8,  // 2: recordscores.Score.category:type_name -> recordcollection.ReleaseMetadata.Category
 	4,  // 3: recordscores.ComputedScore.adjustments:type_name -> recordscores.ScoreAdjustment
-	0,  // 4: recordscores.ScoreAdjustment.type:type_name -> recordscores.ScoreAdjustment.AdjustmentType
-	8,  // 5: recordscores.GetScoreRequest.category:type_name -> recordcollection.ReleaseMetadata.Category
-	2,  // 6: recordscores.GetScoreResponse.scores:type_name -> recordscores.Score
-	3,  // 7: recordscores.GetScoreResponse.computed_score:type_name -> recordscores.ComputedScore
-	3,  // 8: recordscores.Scores.LastScoreEntry.value:type_name -> recordscores.ComputedScore
-	5,  // 9: recordscores.RecordScoreService.GetScore:input_type -> recordscores.GetScoreRequest
-	6,  // 10: recordscores.RecordScoreService.GetScore:output_type -> recordscores.GetScoreResponse
-	10, // [10:11] is the sub-list for method output_type
-	9,  // [9:10] is the sub-list for method input_type
-	9,  // [9:9] is the sub-list for extension type_name
-	9,  // [9:9] is the sub-list for extension extendee
-	0,  // [0:9] is the sub-list for field type_name
+	9,  // 4: recordscores.ComputedScore.location:type_name -> recordcollection.PurchaseLocation
+	0,  // 5: recordscores.ScoreAdjustment.type:type_name -> recordscores.ScoreAdjustment.AdjustmentType
+	8,  // 6: recordscores.GetScoreRequest.category:type_name -> recordcollection.ReleaseMetadata.Category
+	2,  // 7: recordscores.GetScoreResponse.scores:type_name -> recordscores.Score
+	3,  // 8: recordscores.GetScoreResponse.computed_score:type_name -> recordscores.ComputedScore
+	3,  // 9: recordscores.Scores.LastScoreEntry.value:type_name -> recordscores.ComputedScore
+	5,  // 10: recordscores.RecordScoreService.GetScore:input_type -> recordscores.GetScoreRequest
+	6,  // 11: recordscores.RecordScoreService.GetScore:output_type -> recordscores.GetScoreResponse
+	11, // [11:12] is the sub-list for method output_type
+	10, // [10:11] is the sub-list for method input_type
+	10, // [10:10] is the sub-list for extension type_name
+	10, // [10:10] is the sub-list for extension extendee
+	0,  // [0:10] is the sub-list for field type_name
 }
 
 func init() { file_recordscores_proto_init() }

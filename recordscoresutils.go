@@ -17,6 +17,10 @@ var (
 		Name: "recordscores_score_counts",
 		Help: "The size of the score list",
 	}, []string{"folder", "score"})
+	avgScore = promauto.NewGaugeVec(prometheus.GaugeOpts{
+		Name: "recordscores_avg_score",
+		Help: "The score for a given purchase location",
+	}, []string{"location"})
 )
 
 func (s *Server) metrics(ctx context.Context, scores *pb.Scores) {
@@ -24,6 +28,17 @@ func (s *Server) metrics(ctx context.Context, scores *pb.Scores) {
 
 	for _, score := range scores.GetLastScore() {
 		scoreCount.With(prometheus.Labels{"folder": fmt.Sprintf("%v", score.GetCurrFolder()), "score": fmt.Sprintf("%v", score.GetOverall())}).Inc()
+	}
+
+	count := make(map[string]float64)
+	scs := make(map[string]float64)
+	for _, score := range scores.GetLastScore() {
+		count[score.GetLocation().String()]++
+		scs[score.GetLocation().String()] += float64(score.GetOverall())
+	}
+
+	for location, sc := range scs {
+		avgScore.With(prometheus.Labels{"location": location}).Set(sc / count[location])
 	}
 }
 
@@ -54,6 +69,7 @@ func (s *Server) computeScore(ctx context.Context, iid int32, scores []*pb.Score
 	cs := &pb.ComputedScore{
 		BaseRating: int32(2 * (sum / float32(min(3, len(scores))))),
 		CurrFolder: rec.GetRelease().GetFolderId(),
+		Location:   rec.GetMetadata().GetPurchaseLocation(),
 	}
 
 	if rec.GetMetadata().GetKeep() != rcpb.ReleaseMetadata_KEEPER {
