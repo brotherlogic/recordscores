@@ -91,7 +91,7 @@ func main() {
 			log.Fatalf("Can't dial RC: %v", err2)
 		}
 		rcclient := rcpb.NewRecordCollectionServiceClient(conn2)
-		ids, err := rcclient.QueryRecords(ctx, &rcpb.QueryRecordsRequest{Query: &rcpb.QueryRecordsRequest_FolderId{242017}})
+		ids, err := rcclient.QueryRecords(ctx, &rcpb.QueryRecordsRequest{Query: &rcpb.QueryRecordsRequest_All{}})
 		if err != nil {
 			log.Fatalf("Err: %v", err)
 		}
