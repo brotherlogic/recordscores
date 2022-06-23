@@ -71,6 +71,7 @@ func (s *Server) computeScore(ctx context.Context, iid int32, scores []*pb.Score
 		CurrFolder: rec.GetRelease().GetFolderId(),
 		Location:   rec.GetMetadata().GetPurchaseLocation(),
 	}
+	s.CtxLog(ctx, fmt.Sprintf("Base: %v", cs))
 
 	if rec.GetMetadata().GetKeep() != rcpb.ReleaseMetadata_KEEPER {
 		if rec.GetMetadata().GetKeep() != rcpb.ReleaseMetadata_DIGITAL_KEEPER {
