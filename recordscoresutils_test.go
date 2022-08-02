@@ -24,7 +24,7 @@ func TestNoKeepScoredLower(t *testing.T) {
 		t.Fatalf("Bad compute: %v or %v", err1, err2)
 	}
 
-	if s1.GetOverall() >= s2.GetOverall() {
+	if s1.GetOverall() <= s2.GetOverall() {
 		t.Errorf("Score 1 was higher than score 2: %v vs %v", s1, s2)
 	}
 }
