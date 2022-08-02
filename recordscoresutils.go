@@ -76,6 +76,13 @@ func (s *Server) computeScoreInternal(ctx context.Context, rec *rcpb.Record, sco
 	}
 	s.CtxLog(ctx, fmt.Sprintf("Base: %v", cs))
 
+	if rec.GetMetadata().GetKeep() == rcpb.ReleaseMetadata_NOT_KEEPER {
+		cs.Adjustments = append(cs.Adjustments, &pb.ScoreAdjustment{
+			Type:        pb.ScoreAdjustment_KEEP_ADJUSTMENT,
+			ValueChange: -3,
+		})
+	}
+
 	if rec.GetMetadata().GetKeep() != rcpb.ReleaseMetadata_KEEPER {
 		if rec.GetMetadata().GetKeep() != rcpb.ReleaseMetadata_DIGITAL_KEEPER {
 			if len(rec.GetRelease().GetOtherVersions()) > 0 {
