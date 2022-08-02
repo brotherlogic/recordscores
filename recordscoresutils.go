@@ -54,7 +54,10 @@ func (s *Server) computeScore(ctx context.Context, iid int32, scores []*pb.Score
 	if err != nil {
 		return nil, err
 	}
+	return s.computeScoreInternal(ctx, rec, scores)
+}
 
+func (s *Server) computeScoreInternal(ctx context.Context, rec *rcpb.Record, scores []*pb.Score) (*pb.ComputedScore, error) {
 	sort.SliceStable(scores, func(i, j int) bool {
 		return scores[i].GetScoreTime() > scores[j].GetScoreTime()
 	})
@@ -72,6 +75,13 @@ func (s *Server) computeScore(ctx context.Context, iid int32, scores []*pb.Score
 		Location:   rec.GetMetadata().GetPurchaseLocation(),
 	}
 	s.CtxLog(ctx, fmt.Sprintf("Base: %v", cs))
+
+	if rec.GetMetadata().GetKeep() == rcpb.ReleaseMetadata_NOT_KEEPER {
+		cs.Adjustments = append(cs.Adjustments, &pb.ScoreAdjustment{
+			Type:        pb.ScoreAdjustment_KEEP_ADJUSTMENT,
+			ValueChange: -3,
+		})
+	}
 
 	if rec.GetMetadata().GetKeep() != rcpb.ReleaseMetadata_KEEPER {
 		if rec.GetMetadata().GetKeep() != rcpb.ReleaseMetadata_DIGITAL_KEEPER {
