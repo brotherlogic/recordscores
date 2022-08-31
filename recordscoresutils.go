@@ -62,7 +62,7 @@ func (s *Server) computeScoreInternal(ctx context.Context, rec *rcpb.Record, sco
 		return scores[i].GetScoreTime() > scores[j].GetScoreTime()
 	})
 
-	s.Log(fmt.Sprintf("SCORESARE %v", scores))
+	s.CtxLog(ctx, fmt.Sprintf("SCORESARE %v", scores))
 
 	sum := float32(0)
 	for i := 0; i < min(3, len(scores)); i++ {

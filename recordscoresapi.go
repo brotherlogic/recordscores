@@ -147,7 +147,7 @@ func (s *Server) ClientUpdate(ctx context.Context, req *rcpb.ClientUpdateRequest
 				InstanceId: record.GetRelease().GetInstanceId(),
 			}
 			scores.Scores = append(scores.Scores, newScore)
-			s.Log(fmt.Sprintf("Adding score to db: %v -> %v", newScore, latest))
+			s.CtxLog(ctx, fmt.Sprintf("Adding score to db: %v -> %v", newScore, latest))
 
 			return &rcpb.ClientUpdateResponse{}, s.save(ctx, scores)
 		}
