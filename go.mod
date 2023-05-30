@@ -3,7 +3,7 @@ module github.com/brotherlogic/recordscores
 go 1.19
 
 require (
-	github.com/brotherlogic/godiscogs v0.0.0-20230401025107-56c4acd43937
+	github.com/brotherlogic/godiscogs v0.0.0-20230530030232-e7e2f67fbe33
 	github.com/brotherlogic/goserver v0.0.0-20230330215506-65bad61eb180
 	github.com/brotherlogic/keystore v0.0.0-20230529052121-9d261c934fc9
 	github.com/brotherlogic/recordcollection v0.0.0-20230526184136-23b98f38042f
@@ -23,7 +23,7 @@ require (
 	github.com/brotherlogic/dstore v0.0.0-20230527173950-04e3ae8f02ec // indirect
 	github.com/brotherlogic/githubcard v0.0.0-20230524015807-3bafe4a97e26 // indirect
 	github.com/brotherlogic/gobuildslave v0.0.0-20230528035915-9de608647d34 // indirect
-	github.com/brotherlogic/lock v0.0.0-20230522041011-f7c6edf0ff46 // indirect
+	github.com/brotherlogic/lock v0.0.0-20230529052859-d7f9e8276725 // indirect
 	github.com/brotherlogic/logging v0.0.0-20230523181650-b961f3b83607 // indirect
 	github.com/brotherlogic/monitor v0.0.0-20221025152653-c10877c5f9e6 // indirect
 	github.com/brotherlogic/versionserver v0.0.0-20221025154054-c9bcd41be2f2 // indirect
