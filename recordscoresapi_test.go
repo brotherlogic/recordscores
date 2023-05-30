@@ -6,9 +6,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/brotherlogic/keystore/client"
+	keystoreclient "github.com/brotherlogic/keystore/client"
 
-	gdpb "github.com/brotherlogic/godiscogs"
+	gdpb "github.com/brotherlogic/godiscogs/proto"
 	rcpb "github.com/brotherlogic/recordcollection/proto"
 	pb "github.com/brotherlogic/recordscores/proto"
 )
