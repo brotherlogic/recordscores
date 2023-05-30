@@ -10,14 +10,14 @@ import (
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 
-	gdpb "github.com/brotherlogic/godiscogs"
+	gdpb "github.com/brotherlogic/godiscogs/proto"
 	pbg "github.com/brotherlogic/goserver/proto"
 	rcpb "github.com/brotherlogic/recordcollection/proto"
 	rppb "github.com/brotherlogic/recordprocess/proto"
 	pb "github.com/brotherlogic/recordscores/proto"
 )
 
-//Server main server type
+// Server main server type
 type Server struct {
 	*goserver.GoServer
 	returnScore     int32
