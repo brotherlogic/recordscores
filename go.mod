@@ -1,6 +1,6 @@
 module github.com/brotherlogic/recordscores
 
-go 1.16
+go 1.18
 
 require (
 	github.com/brotherlogic/githubcard v0.0.0-20230108093351-7efdf25f657d // indirect
