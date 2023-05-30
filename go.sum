@@ -1798,9 +1798,8 @@ github.com/brotherlogic/lock v0.0.0-20230508010540-1b17169dc067/go.mod h1:79wUhL
 github.com/brotherlogic/lock v0.0.0-20230508015053-0614116672e5/go.mod h1:Og8AM79qIR/TwWJNq1bD/S6cSVcPOqRNexnx9KbzkNA=
 github.com/brotherlogic/lock v0.0.0-20230508025011-1c1260f3ddf2/go.mod h1:yNIirULqy98YhbKoEs4vfqsHOI8iDCB43Z0ISRxk1V4=
 github.com/brotherlogic/lock v0.0.0-20230515030041-370ae15874bd/go.mod h1:3VGDdubVzj4C8nwY6uqxQZeUvt+/FEmLUbR/fLR4F2s=
+github.com/brotherlogic/lock v0.0.0-20230522041011-f7c6edf0ff46 h1:Ahts0QELwz6nqJDKxihE7/pguPVKuuh/CNqiYLlt6AU=
 github.com/brotherlogic/lock v0.0.0-20230522041011-f7c6edf0ff46/go.mod h1:bSaLxUY+QoQpqsPdh9FytztDVs+H/5s7+uRiZyZaFRk=
-github.com/brotherlogic/lock v0.0.0-20230529052859-d7f9e8276725 h1:qw3FLn75C5X1YFPY93nPO2uY8Zph6wVGV6dspFngDhE=
-github.com/brotherlogic/lock v0.0.0-20230529052859-d7f9e8276725/go.mod h1:/LtXXT/nLE3CZJNTY/wON3dIWtcAl78Nl+6MVezbPcg=
 github.com/brotherlogic/logging v0.0.0-20200903150238-67a07e215efe/go.mod h1:cHEM7v1fl8VwwyN4qcrh8hQHR+XNT+xHI4+yOr4l8Wg=
 github.com/brotherlogic/logging v0.0.0-20210606012857-db059830d1dc/go.mod h1:FOXFywySb2dOOhsEFIwxniCxGJltgA395Dhzp2lFXYI=
 github.com/brotherlogic/logging v0.0.0-20210609015032-e6d0ef792137/go.mod h1:FOXFywySb2dOOhsEFIwxniCxGJltgA395Dhzp2lFXYI=
@@ -2828,7 +2827,6 @@ github.com/cenkalti/backoff v2.2.1+incompatible/go.mod h1:90ReRw6GdpyfrHakVjL/QH
 github.com/census-instrumentation/opencensus-proto v0.2.1/go.mod h1:f6KPmirojxKA12rnyqOA5BBL4O983OfeGPqjHWSTneU=
 github.com/census-instrumentation/opencensus-proto v0.3.0/go.mod h1:f6KPmirojxKA12rnyqOA5BBL4O983OfeGPqjHWSTneU=
 github.com/census-instrumentation/opencensus-proto v0.4.1/go.mod h1:4T9NM4+4Vw91VeyqjLS6ao50K5bOcLKN6Q42XnYaRYw=
-github.com/cespare/xxhash v1.1.0 h1:a6HrQnmkObjyL+Gs60czilIUGqrzKutQD6XZog3p+ko=
 github.com/cespare/xxhash v1.1.0/go.mod h1:XrSqR1VqqWfGrhpAt58auRo0WTKS1nRRg3ghfAqPWnc=
 github.com/cespare/xxhash/v2 v2.1.1/go.mod h1:VGX0DQ3Q6kWi7AoAeZDth3/j3BFtOZR5XLFGgcrjCOs=
 github.com/cespare/xxhash/v2 v2.1.2/go.mod h1:VGX0DQ3Q6kWi7AoAeZDth3/j3BFtOZR5XLFGgcrjCOs=
