@@ -3282,8 +3282,8 @@ github.com/brotherlogic/recordprocess v0.0.0-20230831112316-7b83b1645172/go.mod 
 github.com/brotherlogic/recordprocess v0.0.0-20230907121529-f2296f02e3c3/go.mod h1:fZBFRH47OZzaPWTYe3ywkQSkB5Gx6jPrNReWjH4+Vwc=
 github.com/brotherlogic/recordprocess v0.0.0-20230914132315-da130010d8d8/go.mod h1:MfoARUfEYcdDVTe3jclNPu0XIwEKkV1VrbEkK3t0FiM=
 github.com/brotherlogic/recordprocess v0.0.0-20230921142946-9e4c742462d5/go.mod h1:4CHH4IYftjKpHGXBmBHm5U+lB1q4eQ700XRK6gB4shU=
-github.com/brotherlogic/recordprocess v0.0.0-20231020044155-274512917023 h1:o4+0DvjHvn05C5qZ8sAxtxj02DZQ2IWAbMdxY4nh4dg=
-github.com/brotherlogic/recordprocess v0.0.0-20231020044155-274512917023/go.mod h1:kn1Y/0/epuOKRxYZl2k2M0jN2A4+C6q2JN8XXTrCCBQ=
+github.com/brotherlogic/recordprocess v0.0.0-20231020050501-df38d2723efa h1:S5V0Ul35LEabUpGAq8otl/yyUPxJizncuor7Rf5GAbM=
+github.com/brotherlogic/recordprocess v0.0.0-20231020050501-df38d2723efa/go.mod h1:J33XlXbz6Tf5Yof63PpEUz6BZ0eqJ77DFV1i94u7Dlo=
 github.com/brotherlogic/recordsales v0.0.0-20211008040357-bcdb7c5f5db0/go.mod h1:v9yFgu89Rq3p7D7KsmTUS3XUsDsKLhOo96txPKBNfLU=
 github.com/brotherlogic/recordsales v0.0.0-20211009011756-a558f8d4b3b7/go.mod h1:wUixH9B4OYGA+S8Lc1DieTQviouahL99cpwMCw9Kycg=
 github.com/brotherlogic/recordsales v0.0.0-20211020034930-11d8e8ab8946/go.mod h1:wUixH9B4OYGA+S8Lc1DieTQviouahL99cpwMCw9Kycg=
