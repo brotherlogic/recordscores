@@ -61,7 +61,7 @@ func (s *Server) load(ctx context.Context) (*pb.Scores, error) {
 	return scores, nil
 }
 
-//GetScore gets a score
+// GetScore gets a score
 func (s *Server) GetScore(ctx context.Context, req *pb.GetScoreRequest) (*pb.GetScoreResponse, error) {
 	scores, err := s.load(ctx)
 	if err != nil {
@@ -88,7 +88,7 @@ func (s *Server) GetScore(ctx context.Context, req *pb.GetScoreRequest) (*pb.Get
 	return &pb.GetScoreResponse{Scores: subscores, ComputedScore: cscore}, s.save(ctx, scores)
 }
 
-//ClientUpdate on an updated record
+// ClientUpdate on an updated record
 func (s *Server) ClientUpdate(ctx context.Context, req *rcpb.ClientUpdateRequest) (*rcpb.ClientUpdateResponse, error) {
 	scores, err := s.load(ctx)
 	if err != nil {
@@ -126,7 +126,9 @@ func (s *Server) ClientUpdate(ctx context.Context, req *rcpb.ClientUpdateRequest
 
 	score, err := s.computeScore(ctx, req.GetInstanceId(), subscores)
 	if err == nil && score.GetOverall() != record.GetMetadata().GetOverallScore() {
-		s.updateOverallScore(ctx, req.GetInstanceId(), score.GetOverall())
+		if record.GetMetadata().GetBoxState() == rcpb.ReleaseMetadata_OUT_OF_BOX || record.GetMetadata().GetBoxState() == rcpb.ReleaseMetadata_BOX_UNKNOWN {
+			s.updateOverallScore(ctx, req.GetInstanceId(), score.GetOverall())
+		}
 	}
 
 	if record.GetRelease().GetRating() > 0 && !strings.HasPrefix(record.GetMetadata().GetCategory().String(), "PRE") && record.GetMetadata().GetCategory() != rcpb.ReleaseMetadata_UNLISTENED {
