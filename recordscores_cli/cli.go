@@ -72,10 +72,11 @@ func main() {
 	case "ping":
 		id, err := strconv.Atoi(os.Args[2])
 		sclient := rcpb.NewClientUpdateServiceClient(conn)
-		_, err = sclient.ClientUpdate(ctx, &rcpb.ClientUpdateRequest{InstanceId: int32(id)})
+		resp, err := sclient.ClientUpdate(ctx, &rcpb.ClientUpdateRequest{InstanceId: int32(id)})
 		if err != nil {
 			log.Fatalf("Error on GET: %v", err)
 		}
+		fmt.Printf("RESP: %v\n", resp)
 
 	case "fullping":
 		conn2, err2 := utils.LFDialServer(ctx, "recordcollection")

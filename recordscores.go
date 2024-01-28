@@ -94,7 +94,7 @@ func (s *Server) updateOverallScore(ctx context.Context, id int32, score float32
 	defer conn.Close()
 	client := rcpb.NewRecordCollectionServiceClient(conn)
 
-	_, err = client.UpdateRecord(ctx, &rcpb.UpdateRecordRequest{
+	up, err := client.UpdateRecord(ctx, &rcpb.UpdateRecordRequest{
 		Reason: "scores-push",
 		Update: &rcpb.Record{
 			Release: &gdpb.Release{
@@ -105,6 +105,7 @@ func (s *Server) updateOverallScore(ctx context.Context, id int32, score float32
 			},
 		},
 	})
+	s.CtxLog(ctx, fmt.Sprintf("%v", up))
 
 	return err
 }
