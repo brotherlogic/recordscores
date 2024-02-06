@@ -83,9 +83,16 @@ func (s *Server) computeScoreInternal(ctx context.Context, rec *rcpb.Record, sco
 		})
 	}
 
+	if rec.GetMetadata().GetKeep() == rcpb.ReleaseMetadata_KEEP_UNKNOWN {
+		cs.Adjustments = append(cs.Adjustments, &pb.ScoreAdjustment{
+			Type:        pb.ScoreAdjustment_UNKNOWN_KEEP_ADJUSTMENT,
+			ValueChange: -2,
+		})
+	}
+
 	if rec.GetMetadata().GetKeep() != rcpb.ReleaseMetadata_KEEPER {
 		if rec.GetMetadata().GetKeep() != rcpb.ReleaseMetadata_DIGITAL_KEEPER {
-			if len(rec.GetRelease().GetOtherVersions()) > 0 {
+			if len(rec.GetRelease().GetOtherVersions()) > 0 || rec.GetMetadata().GetFiledUnder() == rcpb.ReleaseMetadata_FILE_CD {
 				cs.Adjustments = append(cs.Adjustments, &pb.ScoreAdjustment{
 					Type:        pb.ScoreAdjustment_OTHER_VERSIONS_ADJUSTMENT,
 					ValueChange: -1,
