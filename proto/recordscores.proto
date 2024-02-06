@@ -34,6 +34,7 @@ message ScoreAdjustment {
     OWN_OTHER_ADJUSTMENT = 3;
     PREVIOUSY_SOLD_ADJUSTMENT = 4;
     KEEP_ADJUSTMENT = 5;
+    UNKNOWN_KEEP_ADJUSTMENT = 6;
   }
   AdjustmentType type = 1;
   float value_change = 2;
