@@ -5,7 +5,7 @@ go 1.19
 require (
 	github.com/brotherlogic/godiscogs v0.0.0-20240116051314-7d3de02a07c4
 	github.com/brotherlogic/goserver v0.0.0-20230726200050-779ae6811580
-	github.com/brotherlogic/keystore v0.0.0-20240206010333-b61b88db45b5
+	github.com/brotherlogic/keystore v0.0.0-20240213103345-50262d45c163
 	github.com/brotherlogic/recordcollection v0.0.0-20240209005803-0bcffbcab67b
 	github.com/brotherlogic/recordprocess v0.0.0-20240209034850-73445de1206b
 	github.com/prometheus/client_golang v1.18.0
