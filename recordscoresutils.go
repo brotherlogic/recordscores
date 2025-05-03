@@ -86,7 +86,7 @@ func (s *Server) computeScoreInternal(ctx context.Context, rec *rcpb.Record, sco
 	if rec.GetMetadata().GetKeep() == rcpb.ReleaseMetadata_KEEP_UNKNOWN {
 		cs.Adjustments = append(cs.Adjustments, &pb.ScoreAdjustment{
 			Type:        pb.ScoreAdjustment_UNKNOWN_KEEP_ADJUSTMENT,
-			ValueChange: -2,
+			ValueChange: -1,
 		})
 	}
 
