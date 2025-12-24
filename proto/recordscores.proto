@@ -16,6 +16,7 @@ message Score {
   int32 rating = 2;
   recordcollection.ReleaseMetadata.Category category = 3;
   int64 score_time = 4;
+  recordcollection.ReleaseMetadata.KeepState keep = 5;
 }
 
 message ComputedScore {
