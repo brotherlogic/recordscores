@@ -32,7 +32,7 @@ func main() {
 
 		if err := addFlags.Parse(os.Args[2:]); err == nil {
 			if *id > 0 {
-				res, err := client.GetScore(ctx, &pb.GetScoreRequest{InstanceId: int32(*id)})
+				res, err := client.GetScore(ctx, &pb.GetScoreRequest{InstanceId: int64(*id)})
 				if err != nil {
 					log.Fatalf("Error on Add Record: %v", err)
 				}
@@ -42,7 +42,7 @@ func main() {
 					log.Fatalf("Cannot reach rc: %v", err)
 				}
 				rcclient := rcpb.NewRecordCollectionServiceClient(conn2)
-				rec, err := rcclient.GetRecord(ctx, &rcpb.GetRecordRequest{InstanceId: int32(*id)})
+				rec, err := rcclient.GetRecord(ctx, &rcpb.GetRecordRequest{InstanceId: int64(*id)})
 				if err != nil {
 					log.Fatalf("Cannot find record: %v", err)
 				}
@@ -72,7 +72,7 @@ func main() {
 	case "ping":
 		id, err := strconv.Atoi(os.Args[2])
 		sclient := rcpb.NewClientUpdateServiceClient(conn)
-		resp, err := sclient.ClientUpdate(ctx, &rcpb.ClientUpdateRequest{InstanceId: int32(id)})
+		resp, err := sclient.ClientUpdate(ctx, &rcpb.ClientUpdateRequest{InstanceId: int64(id)})
 		if err != nil {
 			log.Fatalf("Error on GET: %v", err)
 		}
@@ -92,7 +92,7 @@ func main() {
 		sclient := rcpb.NewClientUpdateServiceClient(conn)
 
 		for _, id := range ids.GetInstanceIds() {
-			_, err = sclient.ClientUpdate(ctx, &rcpb.ClientUpdateRequest{InstanceId: int32(id)})
+			_, err = sclient.ClientUpdate(ctx, &rcpb.ClientUpdateRequest{InstanceId: int64(id)})
 			if err != nil {
 				log.Fatalf("Error on GET: %v", err)
 			}

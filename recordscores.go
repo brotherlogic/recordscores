@@ -61,7 +61,7 @@ func (s *Server) GetState() []*pbg.State {
 	return []*pbg.State{}
 }
 
-func (s *Server) getRecord(ctx context.Context, id int32) (*rcpb.Record, error) {
+func (s *Server) getRecord(ctx context.Context, id int64) (*rcpb.Record, error) {
 	if s.returnNilRecord {
 		return nil, fmt.Errorf("Built to fail")
 	}
@@ -83,7 +83,7 @@ func (s *Server) getRecord(ctx context.Context, id int32) (*rcpb.Record, error) 
 	return resp.GetRecord(), nil
 }
 
-func (s *Server) updateOverallScore(ctx context.Context, id int32, score float32) error {
+func (s *Server) updateOverallScore(ctx context.Context, id int64, score float32) error {
 	if s.returnUpdate > 0 {
 		return nil
 	}
@@ -110,7 +110,7 @@ func (s *Server) updateOverallScore(ctx context.Context, id int32, score float32
 	return err
 }
 
-func (s *Server) readScores(ctx context.Context, iid int32) ([]*pb.Score, error) {
+func (s *Server) readScores(ctx context.Context, iid int64) ([]*pb.Score, error) {
 	if s.returnNilScore {
 		return nil, fmt.Errorf("Built to fail")
 	}
@@ -125,14 +125,14 @@ func (s *Server) readScores(ctx context.Context, iid int32) ([]*pb.Score, error)
 	defer conn.Close()
 
 	client := rppb.NewScoreServiceClient(conn)
-	res, err := client.GetScore(ctx, &rppb.GetScoreRequest{InstanceId: iid})
+	res, err := client.GetScore(ctx, &rppb.GetScoreRequest{InstanceId: int32(iid)})
 	if err != nil {
 		return nil, err
 	}
 
 	scores := []*pb.Score{}
 	for _, rs := range res.GetScores() {
-		scores = append(scores, &pb.Score{InstanceId: rs.GetInstanceId(), Rating: rs.GetRating(), Category: rs.GetCategory(), ScoreTime: rs.GetScoreTime()})
+		scores = append(scores, &pb.Score{InstanceId: int64(rs.GetInstanceId()), Rating: rs.GetRating(), Category: rs.GetCategory(), ScoreTime: rs.GetScoreTime()})
 	}
 	return scores, nil
 }
