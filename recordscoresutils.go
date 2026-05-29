@@ -49,7 +49,7 @@ func min(i, j int) int {
 	return j
 }
 
-func (s *Server) computeScore(ctx context.Context, iid int32, scores []*pb.Score) (*pb.ComputedScore, error) {
+func (s *Server) computeScore(ctx context.Context, iid int64, scores []*pb.Score) (*pb.ComputedScore, error) {
 	rec, err := s.getRecord(ctx, iid)
 	if err != nil {
 		return nil, err

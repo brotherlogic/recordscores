@@ -29,15 +29,15 @@ func TestReadFail(t *testing.T) {
 
 	s.GoServer.KSclient.Fail = true
 	s.returnScore = 4
-	s.returnRecord = &rcpb.Record{Release: &gdpb.Release{InstanceId: int32(12), Rating: 4}, Metadata: &rcpb.ReleaseMetadata{Category: rcpb.ReleaseMetadata_SOPHMORE}}
+	s.returnRecord = &rcpb.Record{Release: &gdpb.Release{InstanceId: int64(12), Rating: 4}, Metadata: &rcpb.ReleaseMetadata{Category: rcpb.ReleaseMetadata_SOPHMORE}}
 	s.returnUpdate = 2
 
-	_, err := s.ClientUpdate(context.Background(), &rcpb.ClientUpdateRequest{InstanceId: int32(12)})
+	_, err := s.ClientUpdate(context.Background(), &rcpb.ClientUpdateRequest{InstanceId: int64(12)})
 	if err == nil {
 		t.Fatalf("Update did not work: %v", err)
 	}
 
-	_, err = s.GetScore(context.Background(), &pb.GetScoreRequest{InstanceId: int32(12)})
+	_, err = s.GetScore(context.Background(), &pb.GetScoreRequest{InstanceId: int64(12)})
 	if err == nil {
 		t.Fatalf("Update score: %v", err)
 	}
@@ -48,10 +48,10 @@ func TestReadEmpty(t *testing.T) {
 
 	s.GoServer.KSclient = *keystoreclient.GetTestClient(".testclient")
 	s.returnScore = 4
-	s.returnRecord = &rcpb.Record{Release: &gdpb.Release{InstanceId: int32(12), Rating: 4}, Metadata: &rcpb.ReleaseMetadata{Category: rcpb.ReleaseMetadata_SOPHMORE}}
+	s.returnRecord = &rcpb.Record{Release: &gdpb.Release{InstanceId: int64(12), Rating: 4}, Metadata: &rcpb.ReleaseMetadata{Category: rcpb.ReleaseMetadata_SOPHMORE}}
 	s.returnUpdate = 2
 
-	_, err := s.ClientUpdate(context.Background(), &rcpb.ClientUpdateRequest{InstanceId: int32(12)})
+	_, err := s.ClientUpdate(context.Background(), &rcpb.ClientUpdateRequest{InstanceId: int64(12)})
 	if err != nil {
 		t.Fatalf("Update did not work: %v", err)
 	}
@@ -61,15 +61,15 @@ func TestBasicInteractionWithPreload(t *testing.T) {
 	s := InitTest()
 
 	s.returnScore = 4
-	s.returnRecord = &rcpb.Record{Release: &gdpb.Release{InstanceId: int32(12), Rating: 4}, Metadata: &rcpb.ReleaseMetadata{Category: rcpb.ReleaseMetadata_SOPHMORE}}
+	s.returnRecord = &rcpb.Record{Release: &gdpb.Release{InstanceId: int64(12), Rating: 4}, Metadata: &rcpb.ReleaseMetadata{Category: rcpb.ReleaseMetadata_SOPHMORE}}
 	s.returnUpdate = 2
 
-	_, err := s.ClientUpdate(context.Background(), &rcpb.ClientUpdateRequest{InstanceId: int32(12)})
+	_, err := s.ClientUpdate(context.Background(), &rcpb.ClientUpdateRequest{InstanceId: int64(12)})
 	if err != nil {
 		t.Fatalf("Update did not work: %v", err)
 	}
 
-	scores, err := s.GetScore(context.Background(), &pb.GetScoreRequest{InstanceId: int32(12)})
+	scores, err := s.GetScore(context.Background(), &pb.GetScoreRequest{InstanceId: int64(12)})
 	if err != nil {
 		t.Fatalf("Get Score did not work: %v", err)
 	}
@@ -83,16 +83,16 @@ func TestBasicInteraction(t *testing.T) {
 	s := InitTest()
 
 	s.returnScore = 4
-	s.returnRecord = &rcpb.Record{Release: &gdpb.Release{InstanceId: int32(12), Rating: 4}, Metadata: &rcpb.ReleaseMetadata{Category: rcpb.ReleaseMetadata_SOPHMORE}}
+	s.returnRecord = &rcpb.Record{Release: &gdpb.Release{InstanceId: int64(12), Rating: 4}, Metadata: &rcpb.ReleaseMetadata{Category: rcpb.ReleaseMetadata_SOPHMORE}}
 	s.returnUpdate = 2
 	s.GoServer.KSclient.Save(context.Background(), SCORES, &pb.Scores{Scores: []*pb.Score{&pb.Score{InstanceId: 12, Category: rcpb.ReleaseMetadata_PROFESSOR, ScoreTime: time.Now().Unix()}}})
 
-	_, err := s.ClientUpdate(context.Background(), &rcpb.ClientUpdateRequest{InstanceId: int32(12)})
+	_, err := s.ClientUpdate(context.Background(), &rcpb.ClientUpdateRequest{InstanceId: int64(12)})
 	if err != nil {
 		t.Fatalf("Update did not work: %v", err)
 	}
 
-	scores, err := s.GetScore(context.Background(), &pb.GetScoreRequest{InstanceId: int32(12)})
+	scores, err := s.GetScore(context.Background(), &pb.GetScoreRequest{InstanceId: int64(12)})
 	if err != nil {
 		t.Fatalf("Get Score did not work: %v", err)
 	}
@@ -106,16 +106,16 @@ func TestBasicInteractionWithNaN(t *testing.T) {
 	s := InitTest()
 
 	s.returnScore = 4
-	s.returnRecord = &rcpb.Record{Release: &gdpb.Release{InstanceId: int32(12), Rating: 4}, Metadata: &rcpb.ReleaseMetadata{Category: rcpb.ReleaseMetadata_PROFESSOR, OverallScore: float32(math.NaN())}}
+	s.returnRecord = &rcpb.Record{Release: &gdpb.Release{InstanceId: int64(12), Rating: 4}, Metadata: &rcpb.ReleaseMetadata{Category: rcpb.ReleaseMetadata_PROFESSOR, OverallScore: float32(math.NaN())}}
 	s.returnUpdate = 2
 	s.GoServer.KSclient.Save(context.Background(), SCORES, &pb.Scores{Scores: []*pb.Score{&pb.Score{InstanceId: 12, Category: rcpb.ReleaseMetadata_PROFESSOR, ScoreTime: time.Now().Unix()}}})
 
-	_, err := s.ClientUpdate(context.Background(), &rcpb.ClientUpdateRequest{InstanceId: int32(12)})
+	_, err := s.ClientUpdate(context.Background(), &rcpb.ClientUpdateRequest{InstanceId: int64(12)})
 	if err != nil {
 		t.Fatalf("Update did not work: %v", err)
 	}
 
-	scores, err := s.GetScore(context.Background(), &pb.GetScoreRequest{InstanceId: int32(12)})
+	scores, err := s.GetScore(context.Background(), &pb.GetScoreRequest{InstanceId: int64(12)})
 	if err != nil {
 		t.Fatalf("Get Score did not work: %v", err)
 	}
@@ -133,7 +133,7 @@ func TestBasicInteractionWithBadRecord(t *testing.T) {
 	s.returnUpdate = 2
 	s.GoServer.KSclient.Save(context.Background(), SCORES, &pb.Scores{Scores: []*pb.Score{&pb.Score{InstanceId: 12, Category: rcpb.ReleaseMetadata_PROFESSOR, ScoreTime: time.Now().Unix()}}})
 
-	_, err := s.ClientUpdate(context.Background(), &rcpb.ClientUpdateRequest{InstanceId: int32(12)})
+	_, err := s.ClientUpdate(context.Background(), &rcpb.ClientUpdateRequest{InstanceId: int64(12)})
 	if err == nil {
 		t.Fatalf("Update did not work: %v", err)
 	}
@@ -143,10 +143,10 @@ func TestBasicInteractionWithBadScore(t *testing.T) {
 	s := InitTest()
 
 	s.returnNilScore = true
-	s.returnRecord = &rcpb.Record{Release: &gdpb.Release{InstanceId: int32(12), Rating: 0}, Metadata: &rcpb.ReleaseMetadata{Category: rcpb.ReleaseMetadata_SOPHMORE}}
+	s.returnRecord = &rcpb.Record{Release: &gdpb.Release{InstanceId: int64(12), Rating: 0}, Metadata: &rcpb.ReleaseMetadata{Category: rcpb.ReleaseMetadata_SOPHMORE}}
 	s.returnUpdate = 2
 
-	_, err := s.ClientUpdate(context.Background(), &rcpb.ClientUpdateRequest{InstanceId: int32(12)})
+	_, err := s.ClientUpdate(context.Background(), &rcpb.ClientUpdateRequest{InstanceId: int64(12)})
 	if err == nil {
 		t.Fatalf("Update did not work: %v", err)
 	}
@@ -157,11 +157,11 @@ func TestBasicInteractionWithNoChange(t *testing.T) {
 	s := InitTest()
 
 	s.returnScore = 4
-	s.returnRecord = &rcpb.Record{Release: &gdpb.Release{InstanceId: int32(12), Rating: 0}, Metadata: &rcpb.ReleaseMetadata{Category: rcpb.ReleaseMetadata_PRE_SOPHMORE}}
+	s.returnRecord = &rcpb.Record{Release: &gdpb.Release{InstanceId: int64(12), Rating: 0}, Metadata: &rcpb.ReleaseMetadata{Category: rcpb.ReleaseMetadata_PRE_SOPHMORE}}
 	s.returnUpdate = 2
 	s.GoServer.KSclient.Save(context.Background(), SCORES, &pb.Scores{Scores: []*pb.Score{&pb.Score{InstanceId: 12, Category: rcpb.ReleaseMetadata_PROFESSOR, ScoreTime: time.Now().Unix()}}})
 
-	_, err := s.ClientUpdate(context.Background(), &rcpb.ClientUpdateRequest{InstanceId: int32(12)})
+	_, err := s.ClientUpdate(context.Background(), &rcpb.ClientUpdateRequest{InstanceId: int64(12)})
 	if err != nil {
 		t.Fatalf("Update did not work: %v", err)
 	}
@@ -172,15 +172,15 @@ func TestBasicInteractionLoadOnly(t *testing.T) {
 	s := InitTest()
 
 	s.returnScore = 4
-	s.returnRecord = &rcpb.Record{Release: &gdpb.Release{InstanceId: int32(12), Rating: 0}, Metadata: &rcpb.ReleaseMetadata{Category: rcpb.ReleaseMetadata_SOPHMORE}}
+	s.returnRecord = &rcpb.Record{Release: &gdpb.Release{InstanceId: int64(12), Rating: 0}, Metadata: &rcpb.ReleaseMetadata{Category: rcpb.ReleaseMetadata_SOPHMORE}}
 	s.returnUpdate = 2
 
-	_, err := s.ClientUpdate(context.Background(), &rcpb.ClientUpdateRequest{InstanceId: int32(12)})
+	_, err := s.ClientUpdate(context.Background(), &rcpb.ClientUpdateRequest{InstanceId: int64(12)})
 	if err != nil {
 		t.Fatalf("Update did not work: %v", err)
 	}
 
-	scores, err := s.GetScore(context.Background(), &pb.GetScoreRequest{InstanceId: int32(12)})
+	scores, err := s.GetScore(context.Background(), &pb.GetScoreRequest{InstanceId: int64(12)})
 	if err != nil {
 		t.Fatalf("Get Score did not work: %v", err)
 	}
